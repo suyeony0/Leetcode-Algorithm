@@ -1,6 +1,6 @@
 ﻿[when we choose any node and swap left and right subtrees, we call it a flip operation. 
  Write a function whether two given trees are flip equivalent.]
-- If no matter a tree is filped or not, its children are same but just changed the order.
+- no matter a tree is filped or not, its children have to be same or just changed the order.
 - So we can just compare every possible situation – Greedy using DFS.
 
 class Solution {
