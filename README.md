@@ -1,1 +1,1 @@
-# Leetcode-Algorithm - To record Algorithm what I've solved
+# Recording all the algorithms what I've solved from leetcode.
