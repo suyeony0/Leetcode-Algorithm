@@ -2,6 +2,7 @@
 - I used map. key is Euclidean Distance and value is the coordinates.
 - Since there might be same Euclidean Distance but different coordinates. I should’ve used vector<vector<int>> as a value of the map.
 - the speed was 27.42% beats.
+- I found we can use nth_element function that sort the list till given index is sorted.
 - see the code.
 class Solution {
 public:
