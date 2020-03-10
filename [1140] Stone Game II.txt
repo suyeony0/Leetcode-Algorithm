@@ -1,4 +1,43 @@
 ﻿[97/ [1140] Stone Game II – return the most stones alex can win]
+- Finally, I’ve solved this problem!!! I took almost 5 hours…
+- I refered to discussion about (sum+helper())/2
+- To resolve time limit exceeded, I used dp.
+-see the code.
+class Solution {
+public:
+    int helper(vector<int>& piles,int x,int M,bool alex,vector<vector<int>>& dp){
+        //cout<<"x : "<<x<<" M : "<<M<<endl;
+        if(dp[x][M]!=INT_MIN) return dp[x][M];
+        if(piles.size()-x<=2*M){
+            int sum=0;
+            for(int i=x;i<piles.size();i++)
+                sum+=piles[i];
+            //if(alex) cout<<"alex sum: "<<sum<<endl;
+            //else cout<<"Lee sum: "<<sum<<endl;
+            cout<<endl;
+            return sum;
+        }
+        int res=INT_MIN;
+        int cur_sum=0;
+        for(int i=x;i<x+2*M;i++){
+            cur_sum+=piles[i];
+            //if(alex) cout<<"alex : "<<cur_sum<<endl;
+            //else cout<<"Lee : "<<cur_sum<<endl;
+            res=max(res,cur_sum-helper(piles,i+1,max(M,i-x+1),!alex,dp));
+        }
+        dp[x][M]=res;
+        return res;
+    }
+    
+    int stoneGameII(vector<int>& piles) {
+        vector<vector<int>> dp(piles.size()+1,vector<int>(piles.size()+1,INT_MIN));
+        int sum=std::accumulate(piles.begin(),piles.end(),0);
+        int aa=helper(piles,0,1,true,dp);
+        int res=(sum+aa)/2;
+        return res;
+    }
+};
+
 - At first, I took brute force. But the time limit exceeded occurred.
 class Solution {
 public:
