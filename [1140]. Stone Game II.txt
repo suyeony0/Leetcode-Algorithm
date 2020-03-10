@@ -1,0 +1,57 @@
+﻿[97/ [1140] Stone Game II – return the most stones alex can win]
+- At first, I took brute force. But the time limit exceeded occurred.
+class Solution {
+public:
+    int helper(vector<int>& piles,int x,int M){
+        //if the rest stones are less then 2M, return all the rest stones
+        if(piles.size()-x<=2*M){
+            int sum=0;
+            for(int i=x;i<piles.size();i++)
+                sum+=piles[i];
+            return sum;
+        }
+        //else do brute force.
+        int sum=INT_MIN;// this variable will be returned.
+        int cur_sum=0;
+        int i;
+        for(int m=1;m<=2*M;m++){ //for every m where 1<=m<=2M, find all the possible case.
+            cur_sum=0;
+            for(i=x;i<x+m;i++)
+                cur_sum+=piles[i];
+            sum=max(sum,cur_sum-helper(piles,i,max(M,m)));
+        }
+        return sum;
+    }
+    
+    int stoneGameII(vector<int>& piles) {
+        int sum=std::accumulate(piles.begin(),piles.end(),0);
+        // i think I have to do brute force.
+        return (sum+helper(piles,0,1))/2;
+    }
+};
+- I don’t understand the algorithm. I gave up…
+- they say like, dp[i][j] is the maximum stones alex can get where starting at index I with M=j.
+- fxxking DP!!!
+- see the code.
+class Solution {
+public:
+    int stoneGameII(vector<int>& piles) {
+        int length = piles.size();
+        vector<vector<int>>dp(length + 1, vector<int>(length + 1,0));
+        vector<int> sufsum (length + 1, 0);
+        for (int i = length - 1; i >= 0; i--) {
+            sufsum[i] = sufsum[i + 1] + piles[i];
+        }
+        for (int i = 0; i <= length; i++) {
+            dp[i][length] = sufsum[i];
+        }
+        for (int i = length - 1; i >= 0; i--) {
+            for (int j = length - 1; j >= 1; j--) {
+                for (int X = 1; X <= 2 * j && i + X <= length; X++) {
+                    dp[i][j] = max(dp[i][j], sufsum[i] - dp[i + X][max(j, X)]);
+                }
+            }
+        }
+        return dp[0][1];
+    }
+};
