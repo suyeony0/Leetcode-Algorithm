@@ -1,4 +1,4 @@
-﻿[153. [KAKAO – 2018 : Copression]] 
+﻿[153. [KAKAO – 2018 : Compression]] 
 - For two days from last problem, I had no time to solve algorithm until today.
 - And this problem was quite confusing. Making dictionary was the hardest thing.
 - I made a dictionary for each length of word. After that, from max_length to 1, compare input substring with the dictionary of the substring’s length. 
