@@ -1,0 +1,115 @@
+﻿[210. SAMSUNG SW : IceBerg]
+- it was a simulation problem. 
+- To melt iceberg. I had to determine how many sea shells are adjacent to current shell. 
+- To determine how many districts are, I used BFS with visit 2D array.
+- I spent 20 minutes or so.
+- see the code.
+#include<iostream>
+#include<vector>
+#include<queue>
+using namespace std;
+
+int N, M;
+vector<vector<int>> table;
+vector<vector<bool>> visit;
+int dir[4][2] = { {-1,0},{0,-1},{1,0},{0,1} };
+
+void Melting() {
+	vector<vector<int>> stk;
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			if (table[i][j] != 0) {
+				int res = 0;
+				for (int d = 0; d < 4; d++) {
+					int nx = i + dir[d][0]; int ny = j + dir[d][1];
+					if (nx >= 0 && ny >= 0 && nx < N && ny < M && table[nx][ny] == 0) res++;
+				}
+				stk.emplace_back(vector<int>{i, j, res});
+			}
+		}
+	}
+	for (vector<int> row : stk) {
+		int x = row[0]; int y = row[1]; int m = row[2];
+		table[x][y] -= m;
+		if (table[x][y] < 0) table[x][y] = 0;
+	}
+}
+
+void BFS(int x, int y) {
+	queue<vector<int>> que;
+	que.push(vector<int>{x, y});
+	visit[x][y] = true;
+	while (!que.empty()) {
+		x = que.front()[0]; y = que.front()[1]; que.pop();
+		for (int d = 0; d < 4; d++) {
+			int nx = x + dir[d][0]; int ny = y + dir[d][1];
+			if (nx >= 0 && ny >= 0 && nx < N && ny < M && table[nx][ny] != 0 && visit[nx][ny]==false) {
+				visit[nx][ny] = true;
+				que.push(vector<int>{nx, ny});
+			}
+		}
+	}
+}
+
+bool isEmpty() {
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			if (table[i][j] != 0) return false;
+		}
+	}
+	return true;
+}
+
+void PrintTable() {
+	cout << endl;
+	for (vector<int> row : table) {
+		for (int i : row) cout << i << " ";
+		cout << endl;
+	}
+	cout << endl;
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+	
+	//get input
+	cin >> N >> M;
+	table.assign(N, vector<int>(M, 0));
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			cin >> table[i][j];
+		}
+	}
+
+	//algorithm part
+	int answer=0;
+	bool flag = false;
+	while (true) {
+		answer++;
+		int dis = 0;
+		visit.assign(N, vector<bool>(M, false));
+		Melting();
+		if (isEmpty()) {
+			flag = true;
+			break;
+		}
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (table[i][j] != 0 && visit[i][j] == false) {
+					dis++;
+					BFS(i, j);
+				}
+			}
+		}
+		if (dis >= 2) break;
+		
+	}
+	if (flag) cout << 0;
+	else cout << answer;
+	return 0;
+	
+}
+
+
